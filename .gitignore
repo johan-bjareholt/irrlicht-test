@@ -1,3 +1,19 @@
+# Project filestructure related
+logs/*
+bin/*
+libs/irrlicht-1.8.1
+
+
+
+
+
+
+
+
+#
+# C++ stuff
+#
+
 # Compiled Object files
 *.slo
 *.lo
