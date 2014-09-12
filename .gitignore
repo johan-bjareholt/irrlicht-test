@@ -1,7 +1,7 @@
 # Project filestructure related
 logs/*
 bin/*
-libs/irrlicht-1.8.1
+libs/*
 
 
 
