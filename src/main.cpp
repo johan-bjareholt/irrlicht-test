@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+
 using namespace irr;
 
 using namespace core;
@@ -10,118 +11,20 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+
+
+#include "main.h"
 // Irrlicht device
 IrrlichtDevice *device;
 // Video Driver
 IVideoDriver* driver;
-// Scene Manager
-ISceneManager* smgr;
-// GUIEnvironment
-IGUIEnvironment* guienv;
 
+#include "timer.h"
+#include "events.h"
+#include "mesh.h"
+#include "scene.h"
 
-
-class Logger : public ILogger {};
-
-class Timer {
-private:
-	u32 now;
-	u32 then;
-	long framec;
-public:
-	Timer() {
-		framec = 0;
-		update();
-	}
-	void update(){
-		then = now;
-		now = device->getTimer()->getTime();
-		framec++;
-	}
-	int getFPS(){
-		return driver->getFPS();
-	}
-	u32 frameDeltaTime() {
-		return (f32)(now - then) / 1000.f;
-	}
-	u32 frameDeltaTimeMs() {
-		return (f32)(now - then);
-	}
-};
-
-class EventReceiver : public IEventReceiver
-{
-private:
-	 bool KeyIsDown[KEY_KEY_CODES_COUNT];
-public:
-	virtual bool OnEvent(const SEvent& event)
-	{
-		if (event.EventType == irr::EET_KEY_INPUT_EVENT)
-		{
-			KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
-			if (event.KeyInput.PressedDown)
-			{
-				switch(event.KeyInput.Key){
-					case KEY_SPACE:{
-
-					}
-					case KEY_ESCAPE:{
-						device->closeDevice();
-					}
-					default:
-						return true;
-				}
-			}
-		}
-	}
-    virtual bool IsKeyDown(EKEY_CODE keyCode) const
-    {
-        return KeyIsDown[keyCode];
-    }
-    
-    EventReceiver()
-    {
-        for (u32 i=0; i<KEY_KEY_CODES_COUNT; ++i)
-            KeyIsDown[i] = false;
-    }
-};
-
-// EventReceiver
-EventReceiver eventReceiver;
-
-
-
-class Mesh {
-	IMesh* mesh;
-	IMeshSceneNode* node;
-public:
-	Mesh (const char* modelfile) {
-		mesh = smgr->getMesh(modelfile);
-		if (!mesh)
-		{
-			device->drop();
-			return;
-		}
-	}
-	void addToScene () {
-		node = smgr->addMeshSceneNode( mesh );
-		node->setMaterialFlag(EMF_LIGHTING, false);
-	}
-};
-
-class AnimatedMesh : public Mesh {
-	IAnimatedMesh* mesh;
-	IAnimatedMeshSceneNode* node;
-public:
-	AnimatedMesh (const char* modelfile) : Mesh (modelfile){
-		
-	}
-	void startAnimation () {
-		
-	}
-};
-
-int load(){
+int main(){
 	// Settings
 	bool fullscreen = false;
 	bool stencilbuffer = false;
@@ -136,44 +39,30 @@ int load(){
 
 	// Gets the video driver
 	driver = device->getVideoDriver();
-	// Scene Manager, holds all assets to be rendered
-	smgr = device->getSceneManager();
-	// GUIEnvironment, 2d top graphics
-	guienv = device->getGUIEnvironment();
 
-	guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
-		rect<s32>(10,10,260,22), false, true, 0, -1, true);
+	// Create scene
+	currentScene = new Scene();
 
-	AnimatedMesh box = AnimatedMesh("./assets/models/box/box.b3d");
-	box.addToScene();
-	box.startAnimation();
-
-	smgr->addCameraSceneNode(0, vector3df(0,30,-40), vector3df(0,5,0));
-}
-
-void loop(){
-	Timer timer = Timer();
+	timer = new Timer();
 	wchar_t windowcaption[75];
+	const f32 MOVEMENT_SPEED = 5.f;
 	while(device->run())
 	{
 		// Start frame
 		driver->beginScene(true, true, SColor(255,100,101,140));
 
 		// Work
-		smgr->drawAll();
-		guienv->drawAll();
+		currentScene->inputLoop();
+		currentScene->graphicsLoop();
 
 		// End frame
 		driver->endScene();
-		timer.update();
-		swprintf(windowcaption, 75, L"Johans Irrlicht Demo - FPS: %i", timer.getFPS() );
+
+		timer->update();
+		swprintf(windowcaption, 75, L"Johans Irrlicht Demo - FPS: %i", timer->getFPS() );
 		device->setWindowCaption(windowcaption);
 	}
 	device->drop();
-}
 
-int main(){
-	if (load())
-		loop();
 	return 0;
 }
