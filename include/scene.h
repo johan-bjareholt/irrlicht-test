@@ -1,12 +1,22 @@
+#ifndef SCENE_H_INCLUDED
+#define SCENE_H_INCLUDED
+
+#include <irrlicht.h>
+
+/*
+	Template scene
+*/
+
 class Scene {
-	scene::ICameraSceneNode* camera;
 public:
-	Scene ();
+	Scene () {};
 
-	void graphicsLoop();
+	virtual void logicsLoop() {};
 
-	void getEvent();
-	void inputLoop();
+	virtual void getEvent() {};
+	virtual void inputLoop() {};
 };
 
 extern Scene* currentScene;
+
+#endif

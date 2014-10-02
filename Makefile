@@ -8,7 +8,7 @@ BRANCH=git
 
 
 CC      = g++
-SOURCE  = src/main.cpp src/timer.cpp src/events.cpp src/mesh.cpp src/scene.cpp
+SOURCE  = src/main.cpp src/timer.cpp src/events.cpp src/mesh.cpp src/scene.cpp src/scenes/mainmenu.cpp
 OBJECTS	= ${SOURCE:.c=.o}
 CFLAGS  = --std=c++11 -I./include -I./libs/irrlicht/include
 LDFLAGS = -lIrrlicht

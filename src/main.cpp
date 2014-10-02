@@ -37,10 +37,14 @@ IFileSystem* fs;
 #include "timer.h"
 // Global timer variable
 Timer* timer;
-
 #include "events.h"
 #include "mesh.h"
 #include "scene.h"
+// Global currentScene variable
+Scene* currentScene;
+#include "scenes/mainmenu.h"
+
+
 
 #ifdef _IRR_ANDROID_PLATFORM_
 int mainloop(android_app* app)
@@ -53,11 +57,7 @@ int mainloop()
 	*/
 	SIrrlichtCreationParameters param;
 
-	//#ifdef _DEBUG
-	//param.LoggingLevel = ELL_NONE;
-	//#else
 	param.LoggingLevel = ELL_DEBUG;
-	//#endif
 
 	// Video settings
 	param.Bits = 24;
@@ -87,6 +87,8 @@ int mainloop()
 	guienv = device->getGUIEnvironment();
 	logger = device->getLogger();
 	fs = device->getFileSystem();
+
+	logger->log("Irrlicht device is created");
 
 	// Create native android window
 	#ifdef _IRR_ANDROID_PLATFORM_
@@ -121,7 +123,7 @@ int mainloop()
 	#endif
 
 	// Create scene
-	currentScene = new Scene();
+	currentScene = new MainMenuScene();
 
 	timer = new Timer();
 
@@ -129,15 +131,20 @@ int mainloop()
 	const f32 MOVEMENT_SPEED = 5.f;
 	//ITimer* timer = device->getTimer();
 	//timer->getTime();
+	logger->log("Entering game loop");
 	while(device->run())
 	{
 		if (device->isWindowActive()){
 			// Start frame
 			driver->beginScene();
-			// Work
-			logger->log("asd\n");
+			// Check for held down keys and such
 			currentScene->inputLoop();
-			currentScene->graphicsLoop();
+			// For frame dependent game logic
+			currentScene->logicsLoop();
+			// Draw 3d
+			smgr->drawAll();
+			// Draw gui
+			guienv->drawAll();
 
 			// End frame
 			driver->endScene();

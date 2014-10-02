@@ -1,8 +1,5 @@
 #include <irrlicht.h>
 
-using namespace irr;
-using namespace scene;
-
 #include "main.h"
 #include "mesh.h"
 

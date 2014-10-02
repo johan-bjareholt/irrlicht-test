@@ -1,3 +1,13 @@
+#ifndef MESH_H_INCLUDED
+#define MESH_H_INCLUDED
+
+#include <irrlicht.h>
+
+using namespace irr;
+using namespace scene;
+using namespace scene;
+
+
 /*
 
 	Mesh baseclass
@@ -26,3 +36,5 @@ public:
 	AnimatedMesh (const char* modelfile);
 	void startAnimation ();
 };
+
+#endif
