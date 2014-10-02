@@ -22,15 +22,22 @@ using namespace gui;
 
 #include "main.h"
 // Irrlicht device
-IrrlichtDevice *device;
+IrrlichtDevice* device;
 // Video Driver
 IVideoDriver* driver;
 // Scene Manager, holds all assets to be rendered
 scene::ISceneManager* smgr;
 // GUIEnvironment, 2d top graphics
 gui::IGUIEnvironment* guienv;
+// Logger
+ILogger* logger;
+// Filesystem
+IFileSystem* fs;
 
 #include "timer.h"
+// Global timer variable
+Timer* timer;
+
 #include "events.h"
 #include "mesh.h"
 #include "scene.h"
@@ -40,44 +47,52 @@ int mainloop(android_app* app)
 #else
 int mainloop()
 #endif
-{
-	// Settings
-	bool fullscreen = false;
-	bool stencilbuffer = false;
-	bool vsync = false;
-	int windowWidth=640;
-	int windowHeight=480;
+{	
+	/*
+		Settings
+	*/
+	SIrrlichtCreationParameters param;
+
+	//#ifdef _DEBUG
+	//param.LoggingLevel = ELL_NONE;
+	//#else
+	param.LoggingLevel = ELL_DEBUG;
+	//#endif
 
 	// Video settings
-	SIrrlichtCreationParameters param;
 	param.Bits = 24;
 	param.ZBufferBits = 16;
 	param.AntiAlias  = 0;
 	param.Vsync = false;
+	param.Fullscreen = false;
+	param.Stencilbuffer = false;
 	param.EventReceiver = &eventReceiver;
-
 	#ifdef _IRR_ANDROID_PLATFORM_
 	param.DriverType = EDT_OGLES2;
 	param.WindowSize = dimension2d<u32>(0,0);	// using 0,0 it will automatically set it to the maximal size
 	param.PrivateData = app;
 	#else
 	param.DriverType = video::EDT_OPENGL;
-	param.WindowSize = dimension2d<u32>(windowWidth,windowHeight);
+	param.WindowSize = dimension2d<u32>(640,480);
 	#endif
 
 	// Create video device
-	IrrlichtDevice *device = createDeviceEx(param);
+	device = createDeviceEx(param);
 	if (!device)
 		return -1;
+
 	// Gets the video driver
 	driver = device->getVideoDriver();
 	smgr = device->getSceneManager();
 	guienv = device->getGUIEnvironment();
+	logger = device->getLogger();
+	fs = device->getFileSystem();
 
+	// Create native android window
 	#ifdef _IRR_ANDROID_PLATFORM_
 	ANativeWindow* nativeWindow = static_cast<ANativeWindow*>(driver->getExposedVideoData().OGLESAndroid.Window);
-	windowWidth = ANativeWindow_getWidth(app->window);
-	windowHeight = ANativeWindow_getHeight(app->window);
+	//windowWidth = ANativeWindow_getWidth(app->window);
+	//windowHeight = ANativeWindow_getHeight(app->window);
 	#endif
 
 	/* Get display metrics. We are accessing the Java functions of the JVM directly in this case as there is no NDK function for that yet.
@@ -88,49 +103,50 @@ int mainloop()
 	irr::android::getDisplayMetrics(app, displayMetrics);
 	#endif
 
-	#ifdef _IRR_ANDROID_PLATFORM_
-	stringc mediaPath = "media/";
-	#else
-	stringc mediaPath = "assets/media/";
-	#endif
 
 	// The Android assets file-system does not know which sub-directories it has (blame google).
 	// So we have to add all sub-directories in assets manually. Otherwise we could still open the files, 
 	// but existFile checks will fail (which are for example needed by getFont).
-	/*#ifdef _IRR_ANDROID_PLATFORM_
+	
+	#ifdef _IRR_ANDROID_PLATFORM_
 	for ( u32 i=0; i < fs->getFileArchiveCount(); ++i )
 	{
 		IFileArchive* archive = fs->getFileArchive(i);
 		if ( archive->getType() == EFAT_ANDROID_ASSET )
 		{
-			archive->addDirectoryToFileList(mediaPath);
+			archive->addDirectoryToFileList("./");
 			break;
 		}
 	}
-	#endif*/
+	#endif
 
 	// Create scene
 	currentScene = new Scene();
 
-	//timer = new Timer();
+	timer = new Timer();
+
 	wchar_t windowcaption[75];
 	const f32 MOVEMENT_SPEED = 5.f;
-	ITimer* timer = device->getTimer();
+	//ITimer* timer = device->getTimer();
+	//timer->getTime();
 	while(device->run())
 	{
-		// Start frame
-		driver->beginScene(true, true, SColor(255,100,101,140));
+		if (device->isWindowActive()){
+			// Start frame
+			driver->beginScene();
+			// Work
+			logger->log("asd\n");
+			currentScene->inputLoop();
+			currentScene->graphicsLoop();
 
-		// Work
-		currentScene->inputLoop();
-		currentScene->graphicsLoop();
+			// End frame
+			driver->endScene();
 
-		// End frame
-		driver->endScene();
-
-		//timer->tick();
-		//swprintf(windowcaption, 75, L"Johans Irrlicht Demo - FPS: %i", timer->getFPS() );
-		//device->setWindowCaption(windowcaption);
+			swprintf(windowcaption, 75, L"Johans Irrlicht Demo - FPS: %i", timer->getFPS() );
+			device->setWindowCaption(windowcaption);
+		}
+		device->yield();
+		timer->update();
 	}
 	device->drop();
 

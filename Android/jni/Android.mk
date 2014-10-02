@@ -48,6 +48,4 @@ $(call import-module,android/native_app_glue)
 
 # copy Irrlicht data to assets
 
-#$(shell mkdir -p $(IRRLICHT_PROJECT_PATH)/assets)
-#$(shell cp $(IRRLICHT_PROJECT_PATH)/../../media/Shaders/*.* $(IRRLICHT_PROJECT_PATH)/assets/media/Shaders/)
-
+$(shell cp -r $(PROJECT_PATH)/assets/ $(ANDROID_PROJECT_PATH))

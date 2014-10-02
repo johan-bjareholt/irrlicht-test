@@ -14,6 +14,7 @@ CFLAGS  = --std=c++11 -I./include -I./libs/irrlicht/include
 LDFLAGS = -lIrrlicht
 
 all:
+	mkdir -p ./bin
 	$(CC) -g -o bin/$(NAME) $(CFLAGS) $(LDFLAGS) $(SOURCE)
 
 all-test: compile link

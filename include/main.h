@@ -12,5 +12,9 @@ extern irr::video::IVideoDriver* driver;
 extern irr::scene::ISceneManager* smgr;
 // GUIEnvironment, 2d top graphics
 extern irr::gui::IGUIEnvironment* guienv;
+// Logger
+extern irr::ILogger* logger;
+// Filesystem
+extern irr::io::IFileSystem* fs;
 
 #endif

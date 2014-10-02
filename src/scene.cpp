@@ -18,11 +18,11 @@ Scene* currentScene;
 Scene::Scene () {
 	guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
 		core::rect<s32>(10,10,260,22), false, true, 0, -1, true);
-/*
-	AnimatedMesh* box = new AnimatedMesh(smgr,"./assets/models/box/box.b3d");
+
+	AnimatedMesh* box = new AnimatedMesh("./assets/models/box/box.b3d");
 	box->addToScene();
 	box->startAnimation();
-*/
+
 	// Camera
 	camera = smgr->addCameraSceneNodeFPS(0,100,5);
 	camera->setFOV(45.0f*180.0f/irr::core::DEGTORAD);

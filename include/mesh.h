@@ -8,9 +8,8 @@
 class Mesh {
 	IMesh* mesh;
 	IMeshSceneNode* node;
-	scene::ISceneManager* smgr;
 public:
-	Mesh (scene::ISceneManager* smgr, const char* modelfile);
+	Mesh (const char* modelfile);
 	void addToScene ();
 };
 
@@ -24,6 +23,6 @@ class AnimatedMesh : public Mesh {
 	IAnimatedMesh* mesh;
 	IAnimatedMeshSceneNode* node;
 public:
-	AnimatedMesh (scene::ISceneManager* smgr, const char* modelfile);
+	AnimatedMesh (const char* modelfile);
 	void startAnimation ();
 };

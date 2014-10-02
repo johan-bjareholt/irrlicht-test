@@ -12,8 +12,7 @@ using namespace scene;
 
 */
 
-Mesh::Mesh (scene::ISceneManager* smgr, const char* modelfile) {
-	this->smgr = smgr;
+Mesh::Mesh (const char* modelfile) {
 	mesh = smgr->getMesh(modelfile);
 	if (!mesh)
 	{
@@ -35,7 +34,7 @@ void Mesh::addToScene () {
 
 
 
-AnimatedMesh::AnimatedMesh (scene::ISceneManager* smgr, const char* modelfile) : Mesh (smgr,modelfile){
+AnimatedMesh::AnimatedMesh (const char* modelfile) : Mesh (modelfile){
 	
 }
 void AnimatedMesh::startAnimation () {

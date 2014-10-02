@@ -8,9 +8,8 @@ using namespace core;
 
 class Timer {
 private:
+	u32 now, then;
 	ITimer* irrtimer;
-	u32 now;
-	u32 then;
 	long framec;
 public:
 	Timer();
