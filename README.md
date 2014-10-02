@@ -1,4 +1,6 @@
 irrlicht-test
 =============
 
-To compile, simply unpack irrlicht-1.8.1 to the libs folder
+A irrlicht project solely for playing purposes
+
+Working on making it cross platform too
