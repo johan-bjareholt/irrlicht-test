@@ -9,19 +9,30 @@ BRANCH=git
 
 CC      = g++
 SOURCE  = src/main.cpp src/timer.cpp src/events.cpp src/mesh.cpp src/scene.cpp
-CFLAGS  = --std=c++11 -I./include -I./libs/irrlicht-1.8.1/include
+OBJECTS	= ${SOURCE:.c=.o}
+CFLAGS  = --std=c++11 -I./include -I./libs/irrlicht/include
 LDFLAGS = -lIrrlicht
 
-all: compile
+all:
+	$(CC) -g -o bin/$(NAME) $(CFLAGS) $(LDFLAGS) $(SOURCE)
 
-.PHONY: compile
-compile:
-	$(CC) -o bin/$(NAME) $(CFLAGS) $(LDFLAGS) $(SOURCE)
+all-test: compile link
 
-main.o: main.cpp main.h
-	$(CC) -o $@ $(CFLAGS) $<
+compile: ${SOURCE}
+	echo ${SOURCE}
+	#$(CC) -c $@ $(CFLAGS) $< ${SRC}
 
-.PHONY: clean cleanest
+android:
+	# Compiling irrlicht opengl-es
+	ndk-build --directory ./libs/irrlicht-gles/src/Android/
+	ndk-build --directory ./Android
+	cd ./Android ; ant debug
+
+link: ${OBJECTS}
+	echo ${OBJECTS}
+	#$(CC) -o $@ $(CFLAGS) ${OBJ}
 
 clean:
 	rm *.o
+
+.PHONY: all compile link clean

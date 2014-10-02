@@ -10,12 +10,14 @@ using namespace core;
 Timer* timer;
 
 Timer::Timer() {
+	irrtimer = device->getTimer();
 	framec = 0;
 	update();
 }
 void Timer::update(){
 	then = now;
-	now = device->getTimer()->getTime();
+	irrtimer->tick();
+	now = irrtimer->getTime();
 	framec++;
 }
 int Timer::getFPS(){

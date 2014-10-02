@@ -8,5 +8,9 @@
 extern irr::IrrlichtDevice *device;
 // Video Driver
 extern irr::video::IVideoDriver* driver;
+// Scene Manager, holds all assets to be rendered
+extern irr::scene::ISceneManager* smgr;
+// GUIEnvironment, 2d top graphics
+extern irr::gui::IGUIEnvironment* guienv;
 
 #endif
