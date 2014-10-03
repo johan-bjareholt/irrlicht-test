@@ -3,6 +3,7 @@
 
 #include "scene.h"
 #include "scenes/mainmenu.h"
+#include "scenes/gamescene.h"
 
 #include "main.h"
 #include "timer.h"
@@ -18,10 +19,6 @@ MainMenuScene::MainMenuScene () : Scene () {
 	guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
 		core::rect<s32>(10,10,260,22), false, true, 0, -1, true);
 
-	AnimatedMesh* box = new AnimatedMesh("./assets/models/box/box.b3d");
-	box->addToScene();
-	box->startAnimation();
-
 	// Camera
 	camera = smgr->addCameraSceneNodeFPS(0,100,5);
 	camera->setFOV(45.0f*180.0f/irr::core::DEGTORAD);
@@ -34,23 +31,29 @@ void MainMenuScene::logicsLoop(){
 	
 }
 
-void MainMenuScene::getEvent(){
-
+void MainMenuScene::getEvent(const SEvent& event){
+	switch(event.EventType){
+		case irr::EET_KEY_INPUT_EVENT:
+			if (event.KeyInput.PressedDown)
+			{
+				switch(event.KeyInput.Key)
+				{
+					case KEY_SPACE:{
+						logger->log("You pressed space");
+						currentScene = new GameScene();
+						break;
+					}
+					case KEY_ESCAPE:{
+						device->closeDevice();
+						break;
+					}
+				}
+				return;
+			}
+		default:
+			break;
+	}
 }
 
 void MainMenuScene::inputLoop(){
-	const f32 MOVEMENT_SPEED = 5.f;
-	core::vector3df nodePosition = camera->getPosition();
-
-	if(eventReceiver.IsKeyDown(irr::KEY_KEY_W))
-		nodePosition.Y += MOVEMENT_SPEED * timer->frameDeltaTime();
-	else if(eventReceiver.IsKeyDown(irr::KEY_KEY_S))
-		nodePosition.Y -= MOVEMENT_SPEED * timer->frameDeltaTime();
-
-	if(eventReceiver.IsKeyDown(irr::KEY_KEY_A))
-		nodePosition.X -= MOVEMENT_SPEED * timer->frameDeltaTime();
-	else if(eventReceiver.IsKeyDown(irr::KEY_KEY_D))
-		nodePosition.X += MOVEMENT_SPEED * timer->frameDeltaTime();
-
-	camera->setPosition(nodePosition);
 }

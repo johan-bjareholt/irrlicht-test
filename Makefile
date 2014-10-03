@@ -7,33 +7,46 @@ VERSION_PATCH=1
 BRANCH=git
 
 
-CC      = g++
-SOURCE  = src/main.cpp src/timer.cpp src/events.cpp src/mesh.cpp src/scene.cpp src/scenes/mainmenu.cpp
-OBJECTS	= ${SOURCE:.c=.o}
-CFLAGS  = --std=c++11 -I./include -I./libs/irrlicht/include
-LDFLAGS = -lIrrlicht
+CXX      = g++
 
-all:
-	mkdir -p ./bin
-	$(CC) -g -o bin/$(NAME) $(CFLAGS) $(LDFLAGS) $(SOURCE)
+FILES		= main timer events mesh scene scenes/mainmenu scenes/gamescene
+OBJFILES	= $(patsubst %,obj/%.o,$(FILES))
+CPPFILES	= $(patsubst %,src/%.cpp,$(FILES))
 
-all-test: compile link
+CPPFLAGS  = --std=c++11
+INCLUDE_DIRS := ./include ./libs/irrlicht/include
+LIBRARIES 	 := Irrlicht
 
-compile: ${SOURCE}
-	echo ${SOURCE}
-	#$(CC) -c $@ $(CFLAGS) $< ${SRC}
+CPPFLAGS  += $(foreach includedir,$(INCLUDE_DIRS),-I$(includedir))
+LDFLAGS   += $(foreach library,$(LIBRARIES),-l$(library))
+
+
+all: setup compile link
+
+setup:
+	mkdir -p bin
+	mkdir -p obj
+	mkdir -p obj/scenes
+
+compile: ${OBJFILES}
+
+link:
+	$(CXX) $(CPPFLAGS) $(LDFLAGS) $(OBJFILES) -o bin/$(NAME)
+
+obj/%.o: src/%.cpp
+	$(CXX) -c $(LDFLAGS) $(CPPFLAGS) -o $@ $<
+
 
 android:
 	# Compiling irrlicht opengl-es
-	ndk-build --directory ./libs/irrlicht-gles/src/Android/
+	ndk-build --directory ./libs/irrlicht-gles/src/Android
+	# Build android native binaries
 	ndk-build --directory ./Android
+	# 
 	cd ./Android ; ant debug
 
-link: ${OBJECTS}
-	echo ${OBJECTS}
-	#$(CC) -o $@ $(CFLAGS) ${OBJ}
 
 clean:
-	rm *.o
+	rm -r obj bin
 
-.PHONY: all compile link clean
+.PHONY: all setup link android clean

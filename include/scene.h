@@ -3,17 +3,19 @@
 
 #include <irrlicht.h>
 
+using namespace irr;
+
 /*
 	Template scene
 */
 
 class Scene {
 public:
-	Scene () {};
+	Scene ();
 
 	virtual void logicsLoop() {};
 
-	virtual void getEvent() {};
+	virtual void getEvent(const SEvent&) {};
 	virtual void inputLoop() {};
 };
 

@@ -11,3 +11,9 @@ using namespace gui;
 #include "mesh.h"
 
 #include "scene.h"
+
+
+Scene::Scene () {
+	smgr->clear();
+	guienv->clear();
+}

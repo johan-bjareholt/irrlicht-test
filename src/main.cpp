@@ -1,7 +1,5 @@
 #include <irrlicht.h>
 
-//#include <iostream>
-
 #ifdef _IRR_ANDROID_PLATFORM_
 
 #include <android_native_app_glue.h>
@@ -90,27 +88,24 @@ int mainloop()
 
 	logger->log("Irrlicht device is created");
 
-	// Create native android window
+	/*
+
+		Android specifics
+	
+	*/
 	#ifdef _IRR_ANDROID_PLATFORM_
+	// Create native android window
 	ANativeWindow* nativeWindow = static_cast<ANativeWindow*>(driver->getExposedVideoData().OGLESAndroid.Window);
-	//windowWidth = ANativeWindow_getWidth(app->window);
-	//windowHeight = ANativeWindow_getHeight(app->window);
-	#endif
 
 	/* Get display metrics. We are accessing the Java functions of the JVM directly in this case as there is no NDK function for that yet.
 	   Checkout android_tools.cpp if you want to know how that is done. */
-	#ifdef _IRR_ANDROID_PLATFORM_
 	irr::android::SDisplayMetrics displayMetrics;
 	memset(&displayMetrics, 0, sizeof displayMetrics);
 	irr::android::getDisplayMetrics(app, displayMetrics);
-	#endif
-
 
 	// The Android assets file-system does not know which sub-directories it has (blame google).
 	// So we have to add all sub-directories in assets manually. Otherwise we could still open the files, 
 	// but existFile checks will fail (which are for example needed by getFont).
-	
-	#ifdef _IRR_ANDROID_PLATFORM_
 	for ( u32 i=0; i < fs->getFileArchiveCount(); ++i )
 	{
 		IFileArchive* archive = fs->getFileArchive(i);
@@ -120,11 +115,13 @@ int mainloop()
 			break;
 		}
 	}
-	#endif
+	#endif 
+	// Exiting android specifics
+
 
 	// Create scene
 	currentScene = new MainMenuScene();
-
+	// Create and start timer
 	timer = new Timer();
 
 	wchar_t windowcaption[75];

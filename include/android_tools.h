@@ -1,8 +1,8 @@
 // This file is part of the "Irrlicht Engine".
 // For conditions of distribution and use, see copyright notice in irrlicht.h
 
-#ifndef __IRR_ANDROID_TOOLS_H__
-#define __IRR_ANDROID_TOOLS_H__
+#ifndef ANDROID_TOOLS_H_INCLUDED
+#define ANDROID_TOOLS_H_INCLUDED
 
 #include <irrlicht.h>
 #include <android_native_app_glue.h>
@@ -30,4 +30,4 @@ extern void setSoftInputVisibility(android_app* app, bool visible);
 }
 }
 
-#endif // __IRR_ANDROID_TOOLS_H__
+#endif

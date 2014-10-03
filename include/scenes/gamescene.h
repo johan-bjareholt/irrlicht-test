@@ -1,14 +1,14 @@
-#ifndef SCENE_MAINMENU_H
-#define SCENE_MAINMENU_H
+#ifndef SCENE_GAMESCENE_H
+#define SCENE_GAMESCENE_H
 
 #include "scene.h"
 
 using namespace irr;
 
-class MainMenuScene : public Scene {
+class GameScene : public Scene {
 	irr::scene::ICameraSceneNode* camera;
 public:
-	MainMenuScene ();
+	GameScene ();
 	virtual void logicsLoop();
 
 	virtual void getEvent(const SEvent&);

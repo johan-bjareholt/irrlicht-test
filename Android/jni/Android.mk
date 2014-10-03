@@ -37,7 +37,8 @@ LOCAL_SRC_FILES :=	$(SOURCE_PATH)/main.cpp \
 					$(SOURCE_PATH)/mesh.cpp \
 					$(SOURCE_PATH)/timer.cpp \
 					$(SOURCE_PATH)/scene.cpp \
-					$(SOURCE_PATH)/scenes/mainmenu.cpp
+					$(SOURCE_PATH)/scenes/mainmenu.cpp \
+					$(SOURCE_PATH)/scenes/gamescene.cpp
 
 LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -lz -landroid
 
