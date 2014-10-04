@@ -118,6 +118,11 @@ int mainloop()
 	#endif 
 	// Exiting android specifics
 
+    IGUISkin* skin = guienv->getSkin();
+    IGUIFont* font = guienv->getFont("assets/fonts/fontlucida.png");
+    if (font)
+        skin->setFont(font);
+    skin->setFont(guienv->getBuiltInFont(), EGDF_TOOLTIP);
 
 	// Create scene
 	currentScene = new MainMenuScene();
@@ -133,7 +138,7 @@ int mainloop()
 	{
 		if (device->isWindowActive()){
 			// Start frame
-			driver->beginScene();
+			driver->beginScene(true, true, SColor(0,100,100,130));
 			// Check for held down keys and such
 			currentScene->inputLoop();
 			// For frame dependent game logic

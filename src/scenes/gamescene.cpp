@@ -16,7 +16,8 @@ using namespace gui;
 
 GameScene::GameScene () : Scene () {
 	guienv->addStaticText(L"You are now in-game, move around with WASD.",
-		core::rect<s32>(10,10,260,22), false, true, 0, -1, true);
+		core::rect<s32>(10,10,400,30), false, true, 0, -1, true);
+	guienv->addEditBox(L"Editable Text", rect<s32>(10, 50, 400, 80));
 
 	Mesh* box = new AnimatedMesh("./assets/models/box/box.b3d");
 	box->addToScene();

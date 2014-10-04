@@ -17,7 +17,7 @@ using namespace gui;
 
 MainMenuScene::MainMenuScene () : Scene () {
 	guienv->addStaticText(L"Hello World! This is the Irrlicht OpenGL renderer!",
-		core::rect<s32>(10,10,260,22), false, true, 0, -1, true);
+		core::rect<s32>(10,10,400,30), false, true, 0, -1, true);
 
 	// Camera
 	camera = smgr->addCameraSceneNodeFPS(0,100,5);

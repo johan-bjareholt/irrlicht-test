@@ -43,7 +43,7 @@ bool EventReceiver::OnEvent(const SEvent& event)
 					break;
 			}
 			#ifdef _IRR_ANDROID_PLATFORM_ // Output to catlog instead of stdout
-			__android_log_print(ANDROID_LOG_VERBOSE, "Irrlicht", "%s\n", event.LogEvent.Text);
+			__android_log_print(ANDROID_LOG_INFO, "Irrlicht", "%s\n", event.LogEvent.Text);
 			#else
 			printf("%s: %s\n", levelstr, event.LogEvent.Text);
 			#endif
